@@ -40,3 +40,46 @@
     color: #555;
     font-style: italic;
 }
+
+.cv-uploader {
+  border: 2px dashed #d3d3d3;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.cv-title {
+  color: #187abb;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.cv-subtitle {
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.cv-note {
+  color: #888;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.cv-button {
+  background-color: #187abb;
+  color: white;
+  margin-top: 10px;
+}
+
+.cv-button:hover {
+  background-color: #145a8d;
+}
+
+.cv-file-name {
+  margin-top: 10px;
+  color: #555;
+  font-style: italic;
+}

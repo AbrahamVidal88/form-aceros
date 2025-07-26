@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Grid } from '@mui/material';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import './Form.css';
+import CVUploader from './CVUploader';
 
 interface FormData {
   nombre: string;
@@ -112,25 +113,11 @@ const Formulario: React.FC = () => {
   </Grid>
   {/* CV */}
   <Grid size={12}>
-    <label className="label">Adjuntar CV (PDF, DOC, DOCX) *</label>
-    <input
-      id="cv"
-      type="file"
-      value={form.cv}
-      style={{ display: 'none' }}
-      onChange={handleChange}
-      required
-    />
-    <label htmlFor="cv">
-      <Button variant="contained" component="span">
-        Seleccionar Archivo
-      </Button>
-    </label>
-    <span className="file-name">{form.cv || 'No se ha seleccionado ningún archivo'}</span>
+    <CVUploader />
   </Grid>
   <Grid size={12} style={{ textAlign: 'center' }}>
     <HCaptcha
-      sitekey="your-site-key"
+      sitekey="41ead7f2-9158-4fa0-9540-11d204327562"
       onVerify={(token) => console.log('Captcha token:', token)}
       onExpire={() => console.log('Captcha expired')}
       onError={(error) => console.error('Captcha error:', error)}
