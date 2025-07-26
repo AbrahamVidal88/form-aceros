@@ -1,5 +1,9 @@
 .form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-top: 200px; /* Ajusta este valor según la altura del Header */
+}
+
+.label {
+    background: #187abb;
+    color: white;
+    padding: 5px;
 }

@@ -1,15 +1,14 @@
 import  Form  from './components/forms/Form'
+import Header from './components/header/Header';
 
 function App() {
 
   return (
     <div>
-      <h1>Sopas123</h1>
-      <input type="text"></input>
+      <Header />
       <Form />
     </div>
   )
-   
 }
 
 export default App
