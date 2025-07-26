@@ -1,9 +1,42 @@
 .form-container {
-    margin-top: 200px; /* Ajusta este valor según la altura del Header */
+    margin-top: 100px;
+}
+
+.form-box {
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.form-title {
+    display: inline-block; /* El fondo se ajusta al tamaño del texto */
+    background-color: #fff;
+    padding: 10px;
+    color: #187abb;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center; /* Asegura que el texto dentro del título esté centrado */
+    margin-left: auto; /* Centra horizontalmente */
+    margin-right: auto;
 }
 
 .label {
+    display: block;
+    margin-bottom: 4px;
     background: #187abb;
     color: white;
     padding: 5px;
+    border-radius: 5px;
+}
+
+.file-name {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    font-style: italic;
 }
