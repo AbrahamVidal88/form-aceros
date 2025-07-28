@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import './Form.css';
 
-const CVUploader: React.FC = () => {
+interface CVUploaderProps {
+  onError: (error: boolean) => void;
+}
+
+const CVUploader: React.FC<CVUploaderProps> = ({ onError }) => {
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFileName(e.target.files[0].name);
+      onError(false);
+    } else {
+      onError(true);
     }
   };
 
@@ -15,6 +22,9 @@ const CVUploader: React.FC = () => {
     e.preventDefault();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       setFileName(e.dataTransfer.files[0].name);
+      onError(false);
+    } else {
+      onError(true);
     }
   };
 
@@ -24,7 +34,7 @@ const CVUploader: React.FC = () => {
 
   return (
     <Box
-      className="cv-uploader"
+      className={`cv-uploader ${fileName === null ? 'error' : ''}`} // Clase de error solo si no hay archivo
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
@@ -35,7 +45,7 @@ const CVUploader: React.FC = () => {
         Arrastra tu archivo aquí o haz clic para seleccionar
       </Typography>
       <Typography variant="body2" className="cv-note">
-        Solo archivos PDF, máximo 10MB
+        Solo archivos PDF, DOC, DOCX, JPG máximo 10MB
       </Typography>
       <input
         id="cv"

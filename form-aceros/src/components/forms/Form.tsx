@@ -3,6 +3,7 @@ import { TextField, Button, Box, Grid } from '@mui/material';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import './Form.css';
 import CVUploader from './CVUploader';
+import Card from './Card';
 
 interface FormData {
   nombre: string;
@@ -11,7 +12,6 @@ interface FormData {
   estado: string;
   telefono: string;
   correo: string;
-  cv: string;
 }
 
 const Formulario: React.FC = () => {
@@ -22,7 +22,6 @@ const Formulario: React.FC = () => {
     estado: '',
     telefono: '',
     correo: '',
-    cv: ''
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,29 +32,56 @@ const Formulario: React.FC = () => {
     });
   };
 
+  const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [cvError, setCvError] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    setHasSubmitted(true);
+
+    const newErrors: Partial<FormData> = {};
+    if (!form.nombre) newErrors.nombre = 'El nombre es obligatorio';
+    if (!form.apellido) newErrors.apellido = 'Los apellidos son obligatorios';
+    if (!form.ciudad) newErrors.ciudad = 'La ciudad es obligatoria';
+    if (!form.estado) newErrors.estado = 'El estado es obligatorio';
+    if (!form.telefono) newErrors.telefono = 'El teléfono es obligatorio';
+    if (!form.correo) newErrors.correo = 'El correo es obligatorio';
+
+    setErrors(newErrors);
+
+  // Si no hay errores, enviar el formulario
+  if (Object.keys(newErrors).length === 0) {
     console.log('Datos enviados:', form);
+  }
   };
 
   return (
     <div className="form-container">
-    <Box className="form-box" onSubmit={handleSubmit}>
+      
+    <Box component="form"
+    sx={{ '& .MuiTextField-root': { m: 0} }}
+      noValidate
+    className="form-box" onSubmit={handleSubmit}>
+      <Card />
       <h2 className="form-title">Información Personal</h2>
-      <Grid container spacing={6}>
+      <Grid container spacing={2}>
   {/* Nombre */}
-  <Grid size={{xs:12, sm: 6}}>
+  <Grid size={{xs:12, sm: 4}}>
     <label className="label">Nombre *</label>
     <TextField
-      name="nombre"
-      value={form.nombre}
-      onChange={handleChange}
-      fullWidth
-      required
+    name="nombre"
+    value={form.nombre}
+    onChange={handleChange}
+    fullWidth
+    required
+    error={!!errors.nombre}
+    helperText={errors.nombre} 
     />
   </Grid>
   {/* Apellidos */}
-  <Grid size={{ xs:12, sm:6}}>
+  <Grid size={{ xs:12, sm:4}}>
     <label className="label">Apellidos *</label>
     <TextField
       name="apellido"
@@ -63,10 +89,12 @@ const Formulario: React.FC = () => {
       onChange={handleChange}
       fullWidth
       required
+      error={!!errors.apellido}
+      helperText={errors.apellido}
     />
   </Grid>
   {/* Ciudad */}
-  <Grid size={{ xs: 12, sm: 6}}>
+  <Grid size={{ xs: 12, sm: 4}}>
     <label className="label">Ciudad *</label>
     <TextField
       name="ciudad"
@@ -74,10 +102,12 @@ const Formulario: React.FC = () => {
       onChange={handleChange}
       fullWidth
       required
+      error={!!errors.ciudad}
+      helperText={errors.ciudad}
     />
   </Grid>
   {/* Estado */}
-  <Grid size={{ xs: 12, sm: 6}}>
+  <Grid size={{ xs: 12, sm: 4}}>
     <label className="label">Estado/Provincia *</label>
     <TextField
       name="estado"
@@ -85,10 +115,12 @@ const Formulario: React.FC = () => {
       onChange={handleChange}
       fullWidth
       required
+      error={!!errors.estado}
+      helperText={errors.estado}
     />
   </Grid>
   {/* Teléfono */}
-  <Grid size={{ xs: 12, sm: 6}}>
+  <Grid size={{ xs: 12, sm: 4}}>
     <label className="label">Teléfono de Contacto *</label>
     <TextField
       name="telefono"
@@ -97,10 +129,12 @@ const Formulario: React.FC = () => {
       onChange={handleChange}
       fullWidth
       required
+      error={!!errors.telefono}
+      helperText={errors.telefono}
     />
   </Grid>
   {/* Correo */}
-  <Grid size={{ xs: 12, sm: 6}}>
+  <Grid size={{ xs: 12, sm: 4}}>
     <label className="label">Correo Electrónico *</label>
     <TextField
       name="correo"
@@ -109,11 +143,16 @@ const Formulario: React.FC = () => {
       onChange={handleChange}
       fullWidth
       required
+      error={!!errors.correo}
+      helperText={errors.correo}
     />
   </Grid>
   {/* CV */}
   <Grid size={12}>
-    <CVUploader />
+   <CVUploader onError={setCvError} />
+            {hasSubmitted && cvError && (
+              <span className="error-text">El CV es obligatorio</span>
+            )}
   </Grid>
   <Grid size={12} style={{ textAlign: 'center' }}>
     <HCaptcha

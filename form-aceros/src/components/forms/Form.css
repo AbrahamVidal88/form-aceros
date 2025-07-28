@@ -1,5 +1,7 @@
 .form-container {
-    margin-top: 100px;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 50px;
+    padding-bottom: 100px;
 }
 
 .form-box {
@@ -10,18 +12,16 @@
     background: #fff;
     border-radius: 15px;
     padding: 30px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px #187abb;
 }
 
 .form-title {
-    display: inline-block; /* El fondo se ajusta al tamaño del texto */
-    background-color: #fff;
+    display: inline-block;
     padding: 10px;
-    color: #187abb;
     margin-bottom: 20px;
-    border-radius: 5px;
-    text-align: center; /* Asegura que el texto dentro del título esté centrado */
-    margin-left: auto; /* Centra horizontalmente */
+    border-bottom: 2px solid #187abb;
+    text-align: center;
+    margin-left: auto; 
     margin-right: auto;
 }
 
@@ -32,6 +32,12 @@
     color: white;
     padding: 5px;
     border-radius: 5px;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
 .file-name {
@@ -50,6 +56,10 @@
   margin: 20px auto;
   max-width: 800px;
 }
+
+/* .cv-uploader.error {
+  border-color: red;
+} */
 
 .cv-title {
   color: #187abb;
