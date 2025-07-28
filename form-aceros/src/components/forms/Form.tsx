@@ -164,7 +164,7 @@ const Formulario: React.FC = () => {
     />
   </Grid>
   <Grid size={12} style={{ textAlign: 'center' }}>
-      <Button type="submit" variant="contained" color="primary">
+      <Button onClick={handleSubmit} type="submit" variant="contained" color="primary">
         Enviar
       </Button>
       </Grid>
