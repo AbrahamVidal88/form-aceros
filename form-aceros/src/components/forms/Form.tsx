@@ -33,6 +33,9 @@ const Formulario: React.FC = () => {
   const [cvError, setCvError] = useState(false);
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -54,8 +57,14 @@ const Formulario: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setHasSubmitted(true);
+
+    if(!captchaToken) {
+      setCaptchaError(true);
+      return;
+    }else {
+      setCaptchaError(false);
+    }
 
     const newErrors: Partial<FormData> = {};
     if (!form.nombres) newErrors.nombres = 'El nombre es obligatorio';
@@ -68,13 +77,13 @@ const Formulario: React.FC = () => {
 
     setErrors(newErrors);
 
-    // Si no hay errores, enviar el formulario
     if (Object.keys(newErrors).length === 0 && file) {
       const formData = new FormData();
       Object.entries(form).forEach(([key, value]) => {
         formData.append(key, value as string);
       });
       formData.append('archivoImagen', file);
+      formData.append('captchaToken', captchaToken);
 
       try {
         const response = await agregarEntrevista(formData);
@@ -191,10 +200,21 @@ const Formulario: React.FC = () => {
           <Grid size={12} style={{ textAlign: 'center' }}>
             <HCaptcha
               sitekey="41ead7f2-9158-4fa0-9540-11d204327562"
-              onVerify={(token) => console.log('Captcha token:', token)}
-              onExpire={() => console.log('Captcha expired')}
-              onError={(error) => console.error('Captcha error:', error)}
-            />
+            onVerify={(token) => {
+              setCaptchaToken(token);
+              setCaptchaError(false);
+            }}
+            onExpire={() => {
+              setCaptchaToken(null);
+            }}
+            onError={() => {
+              setCaptchaToken(null);
+              setCaptchaError(true);
+            }}
+          />
+          {hasSubmitted && captchaError && (
+            <span className="error-text">Por favor resuelve el captcha antes de enviar.</span>
+          )}
           </Grid>
           <Grid size={12} style={{ textAlign: 'center' }}>
             <Button onClick={handleSubmit} type="submit" variant="contained" color="primary">
