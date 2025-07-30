@@ -1,22 +1,47 @@
 import React, { useState } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import './Form.css';
+import axios from 'axios';
 
 interface CVUploaderProps {
+  userId: string;
   onError: (error: boolean) => void;
 }
 
-const CVUploader: React.FC<CVUploaderProps> = ({ onError }) => {
+const CVUploader: React.FC<CVUploaderProps> = ({ userId, onError }) => {
   const [fileName, setFileName] = useState<string | null>(null);
+  const [fileError, setFileError] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFileName(e.target.files[0].name);
-      onError(false);
-    } else {
+ const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+
+    // Establecer el nombre del archivo
+    setFileName(file.name);
+    setFileError(false);
+    onError(false);
+
+    // Enviar el archivo al backend
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', userId); // Enviar el ID del usuario
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      console.log('Archivo subido:', response.data);
+    } catch (error) {
+      console.error('Error al subir el archivo:', error);
+      setFileError(true);
       onError(true);
     }
-  };
+  } else {
+    setFileName(null);
+    setFileError(true);
+    onError(true);
+  }
+};
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -34,7 +59,7 @@ const CVUploader: React.FC<CVUploaderProps> = ({ onError }) => {
 
   return (
     <Box
-      className={`cv-uploader ${fileName === null ? 'error' : ''}`} // Clase de error solo si no hay archivo
+      className={`cv-uploader ${fileError ? 'error' : ''}`}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
@@ -52,17 +77,16 @@ const CVUploader: React.FC<CVUploaderProps> = ({ onError }) => {
         type="file"
         style={{ display: 'none' }}
         onChange={handleFileChange}
+        accept=".pdf,.doc,.docx,.jpg" // Restringe los tipos de archivos permitidos
       />
       <label htmlFor="cv">
         <Button variant="contained" component="span" className="cv-button">
           Seleccionar Archivo
         </Button>
       </label>
-      {fileName && (
         <Typography variant="body2" className="cv-file-name">
           Archivo seleccionado: {fileName}
         </Typography>
-      )}
     </Box>
   );
 };
